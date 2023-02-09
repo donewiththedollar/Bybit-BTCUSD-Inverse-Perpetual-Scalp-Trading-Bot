@@ -126,17 +126,25 @@ while True:
     my_list = []
 
     for items in python_list:
-        # item = int(items)
-        item = items
-        # print(item)
-        
-        get_price = r.hgetall(item).get(b'price')
-        if get_price is not None:
-            get_price = float(get_price)
-            
-            # print(get_price)
-            my_list.append(get_price)
-        else:
+        try:
+            # item = int(items)
+            item = items
+            # print(item)
+            try:
+                get_price = r.hgetall(item).get(b'price')
+            except:
+                pass
+            if get_price is not None:
+                try:
+                    get_price = float(get_price)
+                    
+                    # print(get_price)
+                    my_list.append(get_price)
+                except:
+                    pass
+            else:
+                pass
+        except:
             pass
     # print(my_list)
 
@@ -297,23 +305,25 @@ while True:
 
 
     print(' TP Price:',tp_price)
-    
-    if float(current_price) < float(tp_price):
-                  
-        try:
-            place_buy_market_tp_order = invpcl.place_active_order(
-            side          = 'Buy',
-            symbol        = symbol,
-            order_type    = 'Market',
-            qty           = lot_size_market_tp,
-            time_in_force = 'GoodTillCancel', reduce_only = True, close_on_trigger = True
-            )
-        except Exception as e:
-            get_linenumber()
-            print(line_number, 'exeception: {}'.format(e))
-            pass
-    else:
-        print(' No Time for Take Profit Yet')
 
+    try:
+        if float(current_price) < float(tp_price):              
+            try:
+                place_buy_market_tp_order = invpcl.place_active_order(
+                side          = 'Buy',
+                symbol        = symbol,
+                order_type    = 'Market',
+                qty           = lot_size_market_tp,
+                time_in_force = 'GoodTillCancel', reduce_only = True, close_on_trigger = True
+                )
+            except Exception as e:
+                get_linenumber()
+                print(line_number, 'exeception: {}'.format(e))
+                pass
+        else:
+            print(' No Time for Take Profit Yet')
+    except Exception as e:
+        get_linenumber()
+        print(line_number, 'exception: {}'.format(e))
 
     time.sleep(timeout)
