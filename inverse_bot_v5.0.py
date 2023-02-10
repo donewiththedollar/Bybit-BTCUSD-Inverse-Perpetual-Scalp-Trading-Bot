@@ -147,21 +147,25 @@ while True:
         except:
             pass
     # print(my_list)
+    try:
+        max_price = max(my_list)
+        min_price = min(my_list)
+        avr_price = round((sum(my_list)/len(my_list)),2)
+        print('         Max 6:',max_price)
+        print('         Min 6:',min_price)
+        print('     Average 6:',avr_price)
 
-    max_price = max(my_list)
-    min_price = min(my_list)
-    avr_price = round((sum(my_list)/len(my_list)),2)
-    print('         Max 6:',max_price)
-    print('         Min 6:',min_price)
-    print('     Average 6:',avr_price)
+        end_time = time.time()
+        elapsed_time = round((end_time - start_time),2)
+        print('     Exec time:', elapsed_time, 'seconds')
 
-    end_time = time.time()
-    elapsed_time = round((end_time - start_time),2)
-    print('     Exec time:', elapsed_time, 'seconds')
-
-    ask_price = max_price+tick_size
-    print('')
-    print('           Ask:',ask_price)
+        ask_price = max_price+tick_size
+        print('')
+        print('           Ask:',ask_price)
+    except Exception as e:
+        get_linenumber()
+        print(line_number, 'exception: {}'.format(e))
+        pass
     
     try:
         current_price = r.hgetall('BTCUSD').get(b'price')
